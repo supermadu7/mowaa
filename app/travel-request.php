@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title> SPRUHA -  </title>
+    <title> Mowaa -  </title>
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
 	<meta name="keywords" content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
@@ -153,7 +153,7 @@
             <!-- End::app-sidebar -->
 
             <!--APP-CONTENT START-->
-            <div class="main-content app-content "style="background-color: black;">
+            <div class="main-content app-content">
                 <div class="container-fluid col-xl-12" >
 
                     <!-- Page Header -->
@@ -189,37 +189,45 @@
                             <div class="card custom-card">
                                 <div class="card-header justify-content-between">
                                     <div class="card-title">
-                                        Basic Examples
+                                       TRAVELLER DETAILS
                                     </div>
-                                    <div class="prism-toggle">
-                                        <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-eye-line ms-2 d-inline-block align-middle fs-14"></i></button>
-                                    </div>
+                                 
                                 </div>
                                 <div class="card-body">
+                                    <!-- First Row: First Name and Last Name -->
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="firstName"
+                                                    placeholder="First Name">
+                                                <label for="firstName">First Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="lastName"
+                                                    placeholder="Last Name">
+                                                <label for="lastName">Last Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Second Row: Email -->
                                     <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" id="floatingInput"
+                                        <input type="email" class="form-control" id="email"
                                             placeholder="name@example.com">
                                         <label for="floatingInput">Email address</label>
                                     </div>
+                                    
+                                    <!-- Third Row: Department -->
                                     <div class="form-floating">
-                                        <input type="password" class="form-control" id="floatingPassword"
-                                            placeholder="Password">
-                                        <label for="floatingPassword">Password</label>
+                                        <input type="text" class="form-control" id="department"
+                                            placeholder="Department">
+                                        <label for="department">Department</label>
                                     </div>
                                 </div>
                                 <div class="card-footer d-none border-top-0">
-<!-- Prism Code -->
-<pre class="language-html"><code class="language-html">&lt;div class="form-floating mb-3"&gt;
-    &lt;input type="email" class="form-control" id="floatingInput"
-        placeholder="name@example.com"&gt;
-    &lt;label for="floatingInput"&gt;Email address&lt;/label&gt;
-&lt;/div&gt;
-&lt;div class="form-floating"&gt;
-    &lt;input type="password" class="form-control" id="floatingPassword"
-        placeholder="Password"&gt;
-    &lt;label for="floatingPassword"&gt;Password&lt;/label&gt;
-&lt;/div&gt;</code></pre>
-<!-- Prism Code -->
+
                                 </div>
                             </div>
                         </div>
@@ -227,39 +235,33 @@
                             <div class="card custom-card">
                                 <div class="card-header justify-content-between">
                                     <div class="card-title">
-                                        Readonly plain text
-                                    </div>
-                                    <div class="prism-toggle">
-                                        <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-eye-line ms-2 d-inline-block align-middle fs-14"></i></button>
+                                        TRAVEL DETAILS
                                     </div>
                                 </div>
                                 <div class="card-body">
+                                    <!-- Date of Travel -->
                                     <div class="form-floating mb-3">
-                                        <input type="email" readonly class="form-control-plaintext"
-                                            id="floatingEmptyPlaintextInput" placeholder="name@example.com">
-                                        <label for="floatingEmptyPlaintextInput">Empty input</label>
+                                        <input type="date" class="form-control" id="travelDate"
+                                            placeholder="Select travel date">
+                                        <label for="travelDate">Date of Travel</label>
                                     </div>
+                                    
+                                    <!-- Departure Airport -->
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="departureAirport"
+                                            placeholder="Departure Airport">
+                                        <label for="departureAirport">Departure Airport</label>
+                                    </div>
+                                    
+                                    <!-- Arrival Airport -->
                                     <div class="form-floating">
-                                        <input type="email" readonly class="form-control-plaintext"
-                                            id="floatingPlaintextInput" placeholder="name@example.com"
-                                            value="name@example.com">
-                                        <label for="floatingPlaintextInput">Input with value</label>
+                                        <input type="text" class="form-control" id="arrivalAirport"
+                                            placeholder="Arrival Airport">
+                                        <label for="arrivalAirport">Arrival Airport</label>
                                     </div>
                                 </div>
                                 <div class="card-footer d-none border-top-0">
-<!-- Prism Code -->
-<pre class="language-html"><code class="language-html">&lt;div class="form-floating mb-3"&gt;
-    &lt;input type="email" readonly class="form-control-plaintext"
-        id="floatingEmptyPlaintextInput" placeholder="name@example.com"&gt;
-    &lt;label for="floatingEmptyPlaintextInput"&gt;Empty input&lt;/label&gt;
-&lt;/div&gt;
-&lt;div class="form-floating"&gt;
-    &lt;input type="email" readonly class="form-control-plaintext"
-        id="floatingPlaintextInput" placeholder="name@example.com"
-        value="name@example.com"&gt;
-    &lt;label for="floatingPlaintextInput"&gt;Input with value&lt;/label&gt;
-&lt;/div&gt;</code></pre>
-<!-- Prism Code -->
+
                                 </div>
                             </div>
                         </div>
@@ -272,39 +274,44 @@
                             <div class="card custom-card">
                                 <div class="card-header justify-content-between">
                                     <div class="card-title">
-                                        Floating Labels With Pre Defined Values
-                                    </div>
-                                    <div class="prism-toggle">
-                                        <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-eye-line ms-2 d-inline-block align-middle fs-14"></i></button>
+                                        PURPOSE AND BUDGET
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form class="form-floating my-3">
-                                        <input type="email" class="form-control" id="floatingInputValue"
-                                            placeholder="name@example.com" value="test@example.com">
-                                        <label for="floatingInputValue">Input with value</label>
-                                    </form>
-                                    <form class="form-floatin">
-                                        <input type="email" class="form-control is-invalid"
-                                            id="floatingInputInvalid" placeholder="name@example.com"
-                                            value="test@example.com">
-                                        <label for="floatingInputInvalid">Invalid input</label>
-                                    </form>
+                                    <!-- Reason for Travel -->
+                                    <div class="form-floating mb-3">
+                                        <textarea class="form-control" id="reasonTravel"
+                                            placeholder="Reason for travel" ></textarea>
+                                        <label for="reasonTravel">Reason for Travel</label>
+                                    </div>
+                                    
+                                    <!-- Estimated Cost -->
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control" id="estimatedCost"
+                                            placeholder="0.00" step="0.01">
+                                        <label for="estimatedCost">Estimated Cost (USD)</label>
+                                    </div>
+                                    
+                                    <!-- Project Name and Budget Code Row -->
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="projectName"
+                                                    placeholder="Project Name">
+                                                <label for="projectName">Project Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="budgetCode"
+                                                    placeholder="Budget Code">
+                                                <label for="budgetCode">Budget Code</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-footer d-none border-top-0">
-<!-- Prism Code -->
-<pre class="language-html"><code class="language-html">&lt;form class="form-floating my-3"&gt;
-    &lt;input type="email" class="form-control" id="floatingInputValue"
-        placeholder="name@example.com" value="test@example.com"&gt;
-    &lt;label for="floatingInputValue"&gt;Input with value&lt;/label&gt;
-&lt;/form&gt;
-&lt;form class="form-floatin"&gt;
-    &lt;input type="email" class="form-control is-invalid"
-        id="floatingInputInvalid" placeholder="name@example.com"
-        value="test@example.com"&gt;
-    &lt;label for="floatingInputInvalid"&gt;Invalid input&lt;/label&gt;
-&lt;/form&gt;</code></pre>
-<!-- Prism Code -->
+
                                 </div>
                             </div>
                         </div>
@@ -312,37 +319,26 @@
                             <div class="card custom-card">
                                 <div class="card-header justify-content-between">
                                     <div class="card-title">
-                                        Textareas
-                                    </div>
-                                    <div class="prism-toggle">
-                                        <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-eye-line ms-2 d-inline-block align-middle fs-14"></i></button>
+                                        DOCUMENTS
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-floating mb-4">
-                                        <textarea class="form-control" placeholder="Leave a comment here"
-                                            id="floatingTextarea"></textarea>
-                                        <label for="floatingTextarea">Description</label>
+                                    <!-- Passport Upload -->
+                                    <div class="mb-3">
+                                        <label for="passportUpload" class="form-label">Passport (PDF or Image)</label>
+                                        <input type="file" class="form-control" id="passportUpload" 
+                                            accept=".pdf,.jpg,.jpeg,.png,.gif">
                                     </div>
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Leave a comment here"
-                                            id="floatingTextarea2" rows="1" disabled=""></textarea>
-                                        <label for="floatingTextarea2">Disabled</label>
+                                    
+                                    <!-- Additional Documents Upload -->
+                                    <div class="mb-3">
+                                        <label for="additionalDocuments" class="form-label">Additional Documents (PDF or Image)</label>
+                                        <input type="file" class="form-control" id="additionalDocuments" 
+                                            accept=".pdf,.jpg,.jpeg,.png,.gif" multiple>
                                     </div>
                                 </div>
                                 <div class="card-footer d-none border-top-0">
-<!-- Prism Code -->
-<pre class="language-html"><code class="language-html">&lt;div class="form-floating mb-4"&gt;
-    &lt;textarea class="form-control" placeholder="Leave a comment here"
-        id="floatingTextarea"&gt;&lt;/textarea&gt;
-    &lt;label for="floatingTextarea"&gt;Description&lt;/label&gt;
-&lt;/div&gt;
-&lt;div class="form-floating"&gt;
-    &lt;textarea class="form-control" placeholder="Leave a comment here"
-        id="floatingTextarea2" rows="1" disabled=""&gt;&lt;/textarea&gt;
-    &lt;label for="floatingTextarea2"&gt;Disabled&lt;/label&gt;
-&lt;/div&gt;</code></pre>
-<!-- Prism Code -->
+
                                 </div>
                             </div>
                         </div>
@@ -355,37 +351,25 @@
                             <div class="card custom-card">
                                 <div class="card-header justify-content-between">
                                     <div class="card-title">
-                                        Floating Labels In Select
-                                    </div>
-                                    <div class="prism-toggle">
-                                        <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-eye-line ms-2 d-inline-block align-middle fs-14"></i></button>
+                                        APPROVER
                                     </div>
                                 </div>
                                 <div class="card-body">
+                                    <!-- Approver Dropdown -->
                                     <div class="form-floating">
-                                        <select class="form-select" id="floatingSelect"
-                                            aria-label="Floating label select example">
-                                            <option selected>Open this select menu</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                        <select class="form-select" id="approver"
+                                            aria-label="Select approver">
+                                            <option selected>Select Approver</option>
+                                            <option value="manager1">John Smith - Department Manager</option>
+                                            <option value="manager2">Sarah Johnson - Finance Manager</option>
+                                            <option value="manager3">Michael Brown - Operations Manager</option>
+                                            <option value="director1">Lisa Davis - Regional Director</option>
                                         </select>
-                                        <label for="floatingSelect">Works with selects</label>
+                                        <label for="approver">Approver</label>
                                     </div>
                                 </div>
                                 <div class="card-footer d-none border-top-0">
-<!-- Prism Code -->
-<pre class="language-html"><code class="language-html">&lt;div class="form-floating"&gt;
-    &lt;select class="form-select" id="floatingSelect"
-        aria-label="Floating label select example"&gt;
-        &lt;option selected&gt;Open this select menu&lt;/option&gt;
-        &lt;option value="1"&gt;One&lt;/option&gt;
-        &lt;option value="2"&gt;Two&lt;/option&gt;
-        &lt;option value="3"&gt;Three&lt;/option&gt;
-    &lt;/select&gt;
-    &lt;label for="floatingSelect"&gt;Works with selects&lt;/label&gt;
-&lt;/div&gt;</code></pre>
-<!-- Prism Code -->
+
                                 </div>
                             </div>
                         </div>
@@ -393,165 +377,103 @@
                             <div class="card custom-card">
                                 <div class="card-header justify-content-between">
                                     <div class="card-title">
-                                        Floating Labels With Layouts
-                                    </div>
-                                    <div class="prism-toggle">
-                                        <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-eye-line ms-2 d-inline-block align-middle fs-14"></i></button>
+                                        REQUESTER
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row g-2">
-                                        <div class="col-md">
-                                            <div class="form-floating">
-                                                <input type="email" class="form-control" id="floatingInputGrid"
-                                                    placeholder="name@example.com" value="mdo@example.com">
-                                                <label for="floatingInputGrid">Email address</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-floating">
-                                                <select class="form-select" id="floatingSelectGrid">
-                                                    <option selected>Open this select menu</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
-                                                <label for="floatingSelectGrid">Works with selects</label>
-                                            </div>
-                                        </div>
+                                    <!-- Requester -->
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="requester"
+                                            placeholder="Requester Name">
+                                        <label for="requester">Name of Requester (if different from traveller)</label>
                                     </div>
                                 </div>
                                 <div class="card-footer d-none border-top-0">
-<!-- Prism Code -->
-<pre class="language-html"><code class="language-html">&lt;div class="row g-2"&gt;
-    &lt;div class="col-md"&gt;
-        &lt;div class="form-floating"&gt;
-            &lt;input type="email" class="form-control" id="floatingInputGrid"
-                placeholder="name@example.com" value="mdo@example.com"&gt;
-            &lt;label for="floatingInputGrid"&gt;Email address&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-md"&gt;
-        &lt;div class="form-floating"&gt;
-            &lt;select class="form-select" id="floatingSelectGrid"&gt;
-                &lt;option selected&gt;Open this select menu&lt;/option&gt;
-                &lt;option value="1"&gt;One&lt;/option&gt;
-                &lt;option value="2"&gt;Two&lt;/option&gt;
-                &lt;option value="3"&gt;Three&lt;/option&gt;
-            &lt;/select&gt;
-            &lt;label for="floatingSelectGrid"&gt;Works with selects&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-<!-- Prism Code -->
+
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- End:: row-3 -->
 
-                    <!-- Start:: row-4 -->
-                    <div class="row row-sm">
+                    <!-- Start:: Submit and Reset Buttons Row -->
+                    <div class="row row-sm mt-4">
                         <div class="col-xl-12">
-                            <div class="card custom-card">
-                                <div class="card-header justify-content-between">
-                                    <div class="card-titlte">
-                                        Floating Label Colors
-                                    </div>
-                                    <div class="prism-toggle">
-                                        <button class="btn btn-sm btn-primary-light">Show Code<i class="ri-eye-line ms-2 d-inline-block align-middle fs-14"></i></button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row gy-4">
-                                        <div class="col-xl-4">
-                                            <div class="form-floating mb-4 floating-primary">
-                                                <input type="email" class="form-control" id="floatingInputprimary" placeholder="name@example.com">
-                                                <label for="floatingInputprimary">primary</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="form-floating mb-4 floating-secondary">
-                                                <input type="email" class="form-control" id="floatingInputsecondary" placeholder="name@example.com">
-                                                <label for="floatingInputsecondary">secondary</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="form-floating mb-4 floating-warning">
-                                                <input type="email" class="form-control" id="floatingInputwarning" placeholder="name@example.com">
-                                                <label for="floatingInputwarning">warning</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="form-floating mb-4 floating-info">
-                                                <input type="email" class="form-control" id="floatingInputinfo" placeholder="name@example.com">
-                                                <label for="floatingInputinfo">info</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="form-floating mb-4 floating-success">
-                                                <input type="email" class="form-control" id="floatingInputsuccess" placeholder="name@example.com">
-                                                <label for="floatingInputsuccess">success</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4">
-                                            <div class="form-floating mb-4 floating-danger">
-                                                <input type="email" class="form-control" id="floatingInputdanger" placeholder="name@example.com">
-                                                <label for="floatingInputdanger">danger</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer d-none border-top-0">
-<!-- Prism Code -->
-<pre class="language-html"><code class="language-html">&lt;div class="row gy-4"&gt;
-    &lt;div class="col-xl-4"&gt;
-        &lt;div class="form-floating mb-4 floating-primary"&gt;
-            &lt;input type="email" class="form-control" id="floatingInputprimary" placeholder="name@example.com"&gt;
-            &lt;label for="floatingInputprimary"&gt;primary&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xl-4"&gt;
-        &lt;div class="form-floating mb-4 floating-secondary"&gt;
-            &lt;input type="email" class="form-control" id="floatingInputsecondary" placeholder="name@example.com"&gt;
-            &lt;label for="floatingInputsecondary"&gt;secondary&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xl-4"&gt;
-        &lt;div class="form-floating mb-4 floating-warning"&gt;
-            &lt;input type="email" class="form-control" id="floatingInputwarning" placeholder="name@example.com"&gt;
-            &lt;label for="floatingInputwarning"&gt;warning&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xl-4"&gt;
-        &lt;div class="form-floating mb-4 floating-info"&gt;
-            &lt;input type="email" class="form-control" id="floatingInputinfo" placeholder="name@example.com"&gt;
-            &lt;label for="floatingInputinfo"&gt;info&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xl-4"&gt;
-        &lt;div class="form-floating mb-4 floating-success"&gt;
-            &lt;input type="email" class="form-control" id="floatingInputsuccess" placeholder="name@example.com"&gt;
-            &lt;label for="floatingInputsuccess"&gt;success&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-xl-4"&gt;
-        &lt;div class="form-floating mb-4 floating-danger"&gt;
-            &lt;input type="email" class="form-control" id="floatingInputdanger" placeholder="name@example.com"&gt;
-            &lt;label for="floatingInputdanger"&gt;danger&lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-<!-- Prism Code -->
-                                </div>
+                            <div class="d-flex justify-content-center gap-3">
+                                <button type="button" class="btn btn-success btn-lg px-5" data-bs-toggle="modal" data-bs-target="#submitModal">
+                                    <i class="fe fe-check me-2"></i>Submit Request
+                                </button>
+                                <button type="button" class="btn btn-danger btn-lg px-5" data-bs-toggle="modal" data-bs-target="#resetModal">
+                                    <i class="fe fe-refresh-cw me-2"></i>Reset Form
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <!-- Start:: row-4 -->
+                    <!-- End:: Submit and Reset Buttons Row -->
+
+                     
 
                 </div>
             </div>
             <!--APP-CONTENT CLOSE-->
+
+        <!-- Submit Confirmation Modal -->
+        <div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="submitModalLabel">
+                            <i class="fe fe-check me-2"></i>Confirm Submission
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="fe fe-check-circle text-success" style="font-size: 3rem;"></i>
+                            <h4 class="mt-3">Submit Travel Request?</h4>
+                            <p class="text-muted">Are you sure you want to submit this travel request? Once submitted, you may not be able to edit the details.</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="fe fe-x me-2"></i>Cancel
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="submitForm()">
+                            <i class="fe fe-check me-2"></i>Yes, Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Confirmation Modal -->
+        <div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="resetModalLabel">
+                            <i class="fe fe-alert-triangle me-2"></i>Confirm Reset
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="fe fe-alert-triangle text-danger" style="font-size: 3rem;"></i>
+                            <h4 class="mt-3">Reset Form?</h4>
+                            <p class="text-muted">Are you sure you want to reset the form? All entered data will be lost and cannot be recovered.</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            <i class="fe fe-x me-2"></i>Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="resetForm()">
+                            <i class="fe fe-refresh-cw me-2"></i>Yes, Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModal" aria-hidden="true">
           <div class="modal-dialog">
@@ -798,6 +720,48 @@
 
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>
+
+    <!-- Travel Request Form JS -->
+    <script>
+        function submitForm() {
+            // Close the modal
+            var submitModal = bootstrap.Modal.getInstance(document.getElementById('submitModal'));
+            submitModal.hide();
+            
+            // Here you would typically submit the form data to the server
+            // For demo purposes, we'll show a success message
+            alert('Travel request submitted successfully!');
+            
+            // You can add actual form submission logic here
+            // Example: document.getElementById('travelRequestForm').submit();
+        }
+
+        function resetForm() {
+            // Close the modal
+            var resetModal = bootstrap.Modal.getInstance(document.getElementById('resetModal'));
+            resetModal.hide();
+            
+            // Reset all form fields
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('department').value = '';
+            document.getElementById('travelDate').value = '';
+            document.getElementById('departureAirport').value = '';
+            document.getElementById('arrivalAirport').value = '';
+            document.getElementById('reasonTravel').value = '';
+            document.getElementById('estimatedCost').value = '';
+            document.getElementById('projectName').value = '';
+            document.getElementById('budgetCode').value = '';
+            document.getElementById('approver').selectedIndex = 0;
+            document.getElementById('requester').value = '';
+            document.getElementById('passportUpload').value = '';
+            document.getElementById('additionalDocuments').value = '';
+            
+            // Show success message
+            alert('Form has been reset successfully!');
+        }
+    </script>
 
 </body>
 
