@@ -1,0 +1,105 @@
+# PHP
+*.log
+*.tmp
+*.temp
+*.cache
+
+# Configuration files with sensitive data
+config/config.php
+config/database.php
+config/.env
+.env
+.env.local
+.env.production
+
+# Upload directories
+uploads/
+uploads/*
+!uploads/.gitkeep
+
+# Log files
+logs/
+logs/*
+!logs/.gitkeep
+*.log
+
+# Backup files
+backups/
+backups/*
+!backups/.gitkeep
+
+# Cache directories
+cache/
+tmp/
+temp/
+
+# Composer dependencies
+vendor/
+composer.lock
+
+# Node.js dependencies (if using npm/yarn for frontend assets)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build and compiled files
+*.min.css
+*.min.js
+dist/
+build/
+
+# Database files
+*.sql
+*.sqlite
+*.db
+
+# Temporary files
+*.bak
+*.backup
+*.old
+
+# PHP sessions
+sessions/
+
+# Error logs
+error_log
+error.log
+access.log
+
+# Development tools
+.phpunit.cache
+phpunit.xml
+.phpcs.xml
+.phpmd.xml
+
+# Version control
+.svn/
+.cvs/
+
+# Sensitive information
+passwords.txt
+secrets.txt
+private_keys/
+certificates/
+
+# Project specific
+# Add any project-specific files here
