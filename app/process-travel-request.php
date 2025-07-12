@@ -6,7 +6,8 @@ ini_set('max_execution_time', 300);
 
 // Configuration
 $uploadDir = '../uploads/travel-requests/';
-$maxFileSize = 1024 * 1024; // 1MB in bytes
+$maxFileSize = 1024 * 1024; // 1MB final compressed size
+$maxUploadSize = 5 * 1024 * 1024; // 5MB initial upload limit (reasonable for high-quality images)
 $allowedTypes = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
 
 // Database configuration (adjust as needed)
@@ -240,10 +241,8 @@ try {
         $errors[] = ['field' => 'estimatedCost', 'message' => "Please enter a valid estimated cost"];
     }
     
-    // Validate passport upload
-    if (!isset($_FILES['passportUpload']) || empty($_FILES['passportUpload']['name'])) {
-        $errors[] = ['field' => 'passportUpload', 'message' => "Passport document is required"];
-    } elseif ($_FILES['passportUpload']['error'] !== UPLOAD_ERR_OK) {
+    // Validate passport upload (optional)
+    if (!empty($_FILES['passportUpload']['name']) && $_FILES['passportUpload']['error'] !== UPLOAD_ERR_OK) {
         $uploadError = '';
         switch ($_FILES['passportUpload']['error']) {
             case UPLOAD_ERR_INI_SIZE:
@@ -271,8 +270,8 @@ try {
                 $uploadError = "Unknown upload error (code: " . $_FILES['passportUpload']['error'] . ")";
         }
         $errors[] = ['field' => 'passportUpload', 'message' => "Error uploading passport document: " . $uploadError];
-    } elseif ($_FILES['passportUpload']['size'] > $maxFileSize * 2) { // Allow 2MB for initial upload before compression
-        $errors[] = ['field' => 'passportUpload', 'message' => "Passport file is too large. Maximum size is 2MB"];
+    } elseif (!empty($_FILES['passportUpload']['name']) && $_FILES['passportUpload']['size'] > $maxUploadSize) {
+        $errors[] = ['field' => 'passportUpload', 'message' => "Passport file is too large. Maximum size is " . round($maxUploadSize / 1024 / 1024) . "MB"];
     }
     
     // If there are validation errors, redirect back with errors
@@ -297,18 +296,17 @@ try {
         'requester' => !empty($_POST['requester']) ? trim($_POST['requester']) : trim($_POST['firstName']) . ' ' . trim($_POST['lastName'])
     ];
 
-    // Create unique folder for this request
+    // Generate unique request ID
     $requestId = uniqid('TR_', true);
-    $requestDir = $uploadDir . $requestId . '/';
-    if (!is_dir($requestDir)) {
-        mkdir($requestDir, 0755, true);
-    }
     
-    // Process passport upload (required)
-    try {
-        $passportFile = processUploadedFile($_FILES['passportUpload'], $requestDir, 'passport');
-    } catch (Exception $e) {
-        redirectWithErrors([['field' => 'passportUpload', 'message' => $e->getMessage()]], $formData);
+    // Process passport upload (optional)
+    $passportFile = null;
+    if (!empty($_FILES['passportUpload']['name'])) {
+        try {
+            $passportFile = processUploadedFile($_FILES['passportUpload'], $uploadDir, 'passport_' . $requestId);
+        } catch (Exception $e) {
+            redirectWithErrors([['field' => 'passportUpload', 'message' => $e->getMessage()]], $formData);
+        }
     }
     
     // Process additional documents (optional)
@@ -316,6 +314,11 @@ try {
     if (!empty($_FILES['additionalDocuments']['name'][0])) {
         foreach ($_FILES['additionalDocuments']['name'] as $key => $name) {
             if (!empty($name)) {
+                // Validate file size for additional documents
+                if ($_FILES['additionalDocuments']['size'][$key] > $maxUploadSize) {
+                    redirectWithErrors([['field' => 'additionalDocuments', 'message' => "Additional document " . ($key + 1) . " is too large. Maximum size is " . round($maxUploadSize / 1024 / 1024) . "MB"]], $formData);
+                }
+                
                 $file = [
                     'name' => $_FILES['additionalDocuments']['name'][$key],
                     'tmp_name' => $_FILES['additionalDocuments']['tmp_name'][$key],
@@ -323,7 +326,7 @@ try {
                     'error' => $_FILES['additionalDocuments']['error'][$key]
                 ];
                 try {
-                    $additionalFiles[] = processUploadedFile($file, $requestDir, 'additional_' . ($key + 1));
+                    $additionalFiles[] = processUploadedFile($file, $uploadDir, 'additional_' . $requestId . '_' . ($key + 1));
                 } catch (Exception $e) {
                     redirectWithErrors([['field' => 'additionalDocuments', 'message' => "Error processing additional document: " . $e->getMessage()]], $formData);
                 }
@@ -362,7 +365,7 @@ try {
             $data['budgetCode'],
             $data['approver'],
             $data['requester'],
-            json_encode($passportFile)
+            $passportFile ? json_encode($passportFile) : null
         ]);
         
         $requestDbId = $pdo->lastInsertId();
