@@ -436,7 +436,7 @@ function getFieldError($fieldName, $errors) {
                         <div class="mb-3">
                            <label for="passportUpload" class="form-label">Passport (PDF or Image) <span class="text-danger">*</span></label>
                            <input type="file" class="form-control<?php echo hasFieldError('passportUpload', $errors) ? ' is-invalid' : ''; ?>" 
-                              id="passportUpload" name="passportUpload" accept=".pdf,.jpg,.jpeg,.png,.gif" required>
+                              id="passportUpload" name="passportUpload" accept=".pdf,.jpg,.jpeg,.png,.gif" >
                            <?php if (hasFieldError('passportUpload', $errors)): ?>
                               <div class="invalid-feedback">
                                  <?php echo getFieldError('passportUpload', $errors); ?>

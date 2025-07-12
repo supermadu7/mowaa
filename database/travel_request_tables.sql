@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS travel_requests (
     budget_code VARCHAR(50) NOT NULL,
     approver VARCHAR(100) NOT NULL,
     requester VARCHAR(200) NOT NULL,
-    passport_file JSON NOT NULL,
+    passport_file_path VARCHAR(500) NULL,
+    additional_files_paths TEXT NULL,
     status ENUM('pending', 'approved', 'rejected', 'cancelled') DEFAULT 'pending',
     approved_by VARCHAR(100) NULL,
     approved_at TIMESTAMP NULL,
@@ -34,17 +35,6 @@ CREATE TABLE IF NOT EXISTS travel_requests (
     INDEX idx_status (status),
     INDEX idx_travel_date (travel_date),
     INDEX idx_created_at (created_at)
-);
-
--- Additional files table for multiple document uploads
-CREATE TABLE IF NOT EXISTS travel_request_files (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    request_id INT NOT NULL,
-    file_info JSON NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (request_id) REFERENCES travel_requests(id) ON DELETE CASCADE,
-    INDEX idx_request_id (request_id)
 );
 
 -- Approvers table (optional - for managing approver list)

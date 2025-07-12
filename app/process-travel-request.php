@@ -339,14 +339,23 @@ try {
         $pdo = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
+        // Prepare additional files paths as comma-separated string
+        $additionalFilesPaths = [];
+        if (!empty($additionalFiles)) {
+            foreach ($additionalFiles as $file) {
+                $additionalFilesPaths[] = $file['file_path'];
+            }
+        }
+        $additionalFilesString = !empty($additionalFilesPaths) ? implode(',', $additionalFilesPaths) : null;
+        
         // Insert main request
         $sql = "INSERT INTO travel_requests (
             request_id, first_name, last_name, email, department, 
             travel_date, departure_airport, arrival_airport, 
             reason_travel, estimated_cost, project_name, budget_code, 
-            approver, requester, passport_file, created_at, status
+            approver, requester, passport_file_path, additional_files_paths, created_at, status
         ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 'pending'
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 'pending'
         )";
         
         $stmt = $pdo->prepare($sql);
@@ -365,20 +374,9 @@ try {
             $data['budgetCode'],
             $data['approver'],
             $data['requester'],
-            $passportFile ? json_encode($passportFile) : null
+            $passportFile ? $passportFile['file_path'] : null,
+            $additionalFilesString
         ]);
-        
-        $requestDbId = $pdo->lastInsertId();
-        
-        // Insert additional files
-        if (!empty($additionalFiles)) {
-            $fileSql = "INSERT INTO travel_request_files (request_id, file_info) VALUES (?, ?)";
-            $fileStmt = $pdo->prepare($fileSql);
-            
-            foreach ($additionalFiles as $file) {
-                $fileStmt->execute([$requestDbId, json_encode($file)]);
-            }
-        }
         
     } catch (PDOException $e) {
         // If database fails, redirect with error
