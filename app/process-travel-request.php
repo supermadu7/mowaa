@@ -438,7 +438,7 @@ try {
                     
                     <div class="d-flex gap-3 justify-content-center">
                         <a href="travel-request.php" class="btn btn-primary">Submit Another Request</a>
-                        <a href="index.html" class="btn btn-outline-secondary">Back to Dashboard</a>
+                        <a href="index.php" class="btn btn-outline-secondary">Back to Dashboard</a>
                     </div>
                 </div>
             </div>

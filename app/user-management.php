@@ -338,7 +338,7 @@ try {
 		<aside class="app-sidebar sticky" id="sidebar">
 			<!-- Start::main-sidebar-header -->
 			<div class="main-sidebar-header">
-				<a href="index.html" class="header-logo">
+				<a href="index.php" class="header-logo">
 					<img src="../assets/images/brand-logos/desktop-white.png" class="desktop-white" alt="logo">
 					<img src="../assets/images/brand-logos/toggle-white.png" class="toggle-white" alt="logo">
 					<img src="../assets/images/brand-logos/desktop-logo.png" class="desktop-logo" alt="logo">
@@ -364,11 +364,10 @@ try {
 				<!-- Page Header -->
 				<div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
 					<div>
-						<h2 class="main-content-title fs-24 mb-1">User Management</h2>
-						<ol class="breadcrumb mb-0">
-							<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-							<li class="breadcrumb-item active" aria-current="page">User Management</li>
-						</ol>
+						<h2 class="main-content-title fs-24 mb-1">User Management</h2>                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">User Management</li>
+                        </ol>
 					</div>
 					<div class="d-flex">
 						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
@@ -519,11 +518,11 @@ try {
 																case 'manager':
 																	$roleClass = 'bg-warning';
 																	break;
-																case 'employee':
-																	$roleClass = 'bg-primary';
+																case 'approver':
+																	$roleClass = 'bg-info';
 																	break;
-																case 'viewer':
-																	$roleClass = 'bg-secondary';
+																case 'user':
+																	$roleClass = 'bg-primary';
 																	break;
 															}
 															?>
@@ -652,8 +651,8 @@ try {
 								<div class="form-floating mb-3">
 									<select class="form-select" id="role" name="role" required>
 										<option value="">Select Role</option>
-										<option value="viewer">Viewer</option>
-										<option value="employee">Employee</option>
+										<option value="user">User</option>
+										<option value="approver">Approver</option>
 										<option value="manager">Manager</option>
 										<option value="admin">Administrator</option>
 									</select>
@@ -753,8 +752,8 @@ try {
 								<div class="form-floating mb-3">
 									<select class="form-select" id="edit_role" name="role" required>
 										<option value="">Select Role</option>
-										<option value="viewer">Viewer</option>
-										<option value="employee">Employee</option>
+										<option value="user">User</option>
+										<option value="approver">Approver</option>
 										<option value="manager">Manager</option>
 										<option value="admin">Administrator</option>
 									</select>
@@ -996,8 +995,8 @@ try {
 				'admin': 'bg-danger',
 				'administrator': 'bg-danger',
 				'manager': 'bg-warning',
-				'employee': 'bg-primary',
-				'viewer': 'bg-secondary'
+				'approver': 'bg-info',
+				'user': 'bg-primary'
 			};
 			return `<span class="badge ${roleClasses[role] || 'bg-light text-dark'}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>`;
 		}

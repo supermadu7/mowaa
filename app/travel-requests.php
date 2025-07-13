@@ -94,7 +94,7 @@ try {
 
          <!-- Start::main-sidebar-header -->
          <div class="main-sidebar-header">
-            <a href="index.html" class="header-logo">
+            <a href="index.php" class="header-logo">
                <img src="../assets/images/brand-logos/desktop-white.png" class="desktop-white" alt="logo">
                <img src="../assets/images/brand-logos/toggle-white.png" class="toggle-white" alt="logo">
                <img src="../assets/images/brand-logos/desktop-logo.png" class="desktop-logo" alt="logo">
