@@ -37,25 +37,78 @@ CREATE TABLE IF NOT EXISTS travel_requests (
     INDEX idx_created_at (created_at)
 );
 
--- Approvers table (optional - for managing approver list)
-CREATE TABLE IF NOT EXISTS approvers (
+-- Users table (for approvers and other system users with login functionality)
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    approver_code VARCHAR(50) UNIQUE NOT NULL,
-    name VARCHAR(100) NOT NULL,
+    user_code VARCHAR(50) UNIQUE NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
     title VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL,
     department VARCHAR(100),
+    phone VARCHAR(20),
+    profile_picture VARCHAR(500),
+    user_role ENUM('admin', 'approver', 'manager', 'user') DEFAULT 'user',
+    can_approve BOOLEAN DEFAULT FALSE,
+    approval_limit DECIMAL(10,2) DEFAULT 0.00,
     is_active BOOLEAN DEFAULT TRUE,
+    last_login TIMESTAMP NULL,
+    password_reset_token VARCHAR(255) NULL,
+    password_reset_expires TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_username (username),
+    INDEX idx_email (email),
+    INDEX idx_user_code (user_code),
+    INDEX idx_user_role (user_role),
+    INDEX idx_can_approve (can_approve),
+    INDEX idx_department (department),
+    INDEX idx_is_active (is_active)
 );
 
--- Insert sample approvers
-INSERT INTO approvers (approver_code, name, title, email, department) VALUES
-('manager1', 'John Smith', 'Department Manager', 'john.smith@mowaa.com', 'Operations'),
-('manager2', 'Sarah Johnson', 'Finance Manager', 'sarah.johnson@mowaa.com', 'Finance'),
-('manager3', 'Michael Brown', 'Operations Manager', 'michael.brown@mowaa.com', 'Operations'),
-('director1', 'Lisa Davis', 'Regional Director', 'lisa.davis@mowaa.com', 'Management');
+-- Insert sample users (approvers and admins)
+-- Note: All users have default password 'password123' (hashed)
+-- Change these passwords after first login for security
+INSERT INTO users (user_code, username, email, password_hash, first_name, last_name, title, department, user_role, can_approve, approval_limit) VALUES
+('admin1', 'admin', 'admin@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System', 'Administrator', 'System Administrator', 'IT', 'admin', TRUE, 999999.99),
+('mgr001', 'johnsmith', 'john.smith@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John', 'Smith', 'Department Manager', 'Operations', 'manager', TRUE, 10000.00),
+('mgr002', 'sarahjohnson', 'sarah.johnson@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Sarah', 'Johnson', 'Finance Manager', 'Finance', 'manager', TRUE, 25000.00),
+('mgr003', 'michaelbrown', 'michael.brown@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Michael', 'Brown', 'Operations Manager', 'Operations', 'manager', TRUE, 15000.00),
+('dir001', 'lisadavis', 'lisa.davis@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Lisa', 'Davis', 'Regional Director', 'Management', 'approver', TRUE, 50000.00);
+
+-- User sessions table for login management
+CREATE TABLE IF NOT EXISTS user_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_token VARCHAR(255) UNIQUE NOT NULL,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id),
+    INDEX idx_session_token (session_token),
+    INDEX idx_expires_at (expires_at)
+);
+
+-- User login attempts table for security
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100),
+    email VARCHAR(255),
+    ip_address VARCHAR(45),
+    success BOOLEAN DEFAULT FALSE,
+    attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    INDEX idx_username (username),
+    INDEX idx_email (email),
+    INDEX idx_ip_address (ip_address),
+    INDEX idx_attempted_at (attempted_at)
+);
 
 -- Comments table for approval workflow
 CREATE TABLE IF NOT EXISTS travel_request_comments (
