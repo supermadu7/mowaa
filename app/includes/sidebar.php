@@ -111,6 +111,10 @@
                 </li>
                 <!-- End::slide -->
 
+                <?php 
+                // Only show Administration section for system admins
+                if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): 
+                ?>
                 <!-- Start::slide__category -->
                 <li class="slide__category"><span class="category-name">Administration</span></li>
                 <!-- End::slide__category -->
@@ -125,6 +129,7 @@
                     </a>
                 </li>
                 <!-- End::slide -->
+                <?php endif; ?>
 
                 <!-- Start::slide__category -->
                 <li class="slide__category"><span class="category-name">My Account</span></li>
