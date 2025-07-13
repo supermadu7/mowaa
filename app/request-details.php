@@ -22,7 +22,8 @@ try {
                 travel_date, departure_airport, arrival_airport, reason_travel,
                 estimated_cost, project_name, budget_code, approver, requester,
                 passport_file, additional_files_paths, status, approved_by,
-                approved_at, rejection_reason, created_at, updated_at
+                approved_at, approval_comments, rejected_by, rejected_at,
+                rejection_reason, created_at, updated_at
             FROM travel_requests 
             WHERE id = :id";
 
@@ -176,16 +177,26 @@ try {
                             <i class="fe fe-arrow-left me-2"></i> Back to List
                         </a>
                         <?php if ($request['status'] == 'pending'): ?>
-                            <button type="button" class="btn btn-success my-2 me-2" onclick="approveRequest(<?php echo $request['id']; ?>)">
+                            <button type="button" class="btn btn-success my-2 me-2" data-bs-toggle="modal" data-bs-target="#approveModal">
                                 <i class="fe fe-check me-2"></i> Approve
                             </button>
-                            <button type="button" class="btn btn-danger my-2" onclick="rejectRequest(<?php echo $request['id']; ?>)">
+                            <button type="button" class="btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#rejectModal">
                                 <i class="fe fe-x me-2"></i> Reject
                             </button>
                         <?php endif; ?>
                     </div>
                 </div>
                 <!-- Page Header Close -->
+
+                <!-- Display Alert Messages -->
+                <?php if (isset($_SESSION['alert'])): ?>
+                    <div class="alert alert-<?php echo htmlspecialchars($_SESSION['alert']['type']); ?> alert-dismissible fade show" role="alert">
+                        <i class="fe fe-<?php echo $_SESSION['alert']['type'] == 'success' ? 'check-circle' : ($_SESSION['alert']['type'] == 'danger' ? 'alert-triangle' : 'info'); ?> me-2"></i>
+                        <?php echo htmlspecialchars($_SESSION['alert']['message']); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php unset($_SESSION['alert']); ?>
+                <?php endif; ?>
 
                 <!-- Request Overview Card -->
                 <div class="row">
@@ -432,10 +443,15 @@ try {
                                         <p class="mb-1">
                                             <strong>Approved by:</strong> <?php echo htmlspecialchars($request['approved_by'] ?: 'System'); ?>
                                         </p>
-                                        <p class="mb-0">
+                                        <p class="mb-1">
                                             <strong>Approved on:</strong> 
                                             <?php echo $request['approved_at'] ? date('M d, Y H:i', strtotime($request['approved_at'])) : 'Not specified'; ?>
                                         </p>
+                                        <?php if (!empty($request['approval_comments'])): ?>
+                                            <p class="mb-0">
+                                                <strong>Comments:</strong> <?php echo nl2br(htmlspecialchars($request['approval_comments'])); ?>
+                                            </p>
+                                        <?php endif; ?>
                                     </div>
                                 <?php elseif ($request['status'] == 'rejected'): ?>
                                     <div class="alert alert-danger">
@@ -445,9 +461,12 @@ try {
                                                 <strong>Reason:</strong> <?php echo nl2br(htmlspecialchars($request['rejection_reason'])); ?>
                                             </p>
                                         <?php endif; ?>
+                                        <p class="mb-1">
+                                            <strong>Rejected by:</strong> <?php echo htmlspecialchars($request['rejected_by'] ?: 'System'); ?>
+                                        </p>
                                         <p class="mb-0">
-                                            <strong>Updated on:</strong> 
-                                            <?php echo date('M d, Y H:i', strtotime($request['updated_at'])); ?>
+                                            <strong>Rejected on:</strong> 
+                                            <?php echo $request['rejected_at'] ? date('M d, Y H:i', strtotime($request['rejected_at'])) : date('M d, Y H:i', strtotime($request['updated_at'])); ?>
                                         </p>
                                     </div>
                                 <?php endif; ?>
@@ -504,58 +523,88 @@ try {
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>
 
-    <!-- Request Details JS -->
-    <script>
-        function approveRequest(id) {
-            if (confirm('Are you sure you want to approve this travel request?')) {
-                $.ajax({
-                    url: 'update-request-status.php',
-                    method: 'POST',
-                    data: {
-                        id: id,
-                        status: 'approved'
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            location.reload();
-                        } else {
-                            alert('Error approving request: ' + (response.message || 'Unknown error'));
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Error processing request: ' + error);
-                    }
-                });
-            }
-        }
+    <!-- Approve Modal -->
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approveModalLabel">Approve Travel Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="process-request-action.php">
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <i class="fe fe-info me-2"></i>
+                            Are you sure you want to approve this travel request?
+                        </div>
+                        <div class="mb-3">
+                            <strong>Request ID:</strong> <?php echo htmlspecialchars($request['request_id']); ?>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Requester:</strong> <?php echo htmlspecialchars($request['requester']); ?>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Destination:</strong> <?php echo htmlspecialchars($request['arrival_airport']); ?>
+                        </div>
+                        <div class="mb-3">
+                            <label for="approval_comments" class="form-label">Comments (Optional)</label>
+                            <textarea class="form-control" id="approval_comments" name="comments" rows="3" placeholder="Add any comments for this approval..."></textarea>
+                        </div>
+                        <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
+                        <input type="hidden" name="action" value="approve">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fe fe-check me-2"></i>Approve Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-        function rejectRequest(id) {
-            const reason = prompt('Please provide a reason for rejection:');
-            if (reason && reason.trim()) {
-                $.ajax({
-                    url: 'update-request-status.php',
-                    method: 'POST',
-                    data: {
-                        id: id,
-                        status: 'rejected',
-                        reason: reason
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            location.reload();
-                        } else {
-                            alert('Error rejecting request: ' + (response.message || 'Unknown error'));
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Error processing request: ' + error);
-                    }
-                });
-            }
-        }
-    </script>
+    <!-- Reject Modal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">Reject Travel Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="process-request-action.php">
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            <i class="fe fe-alert-triangle me-2"></i>
+                            Are you sure you want to reject this travel request?
+                        </div>
+                        <div class="mb-3">
+                            <strong>Request ID:</strong> <?php echo htmlspecialchars($request['request_id']); ?>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Requester:</strong> <?php echo htmlspecialchars($request['requester']); ?>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Destination:</strong> <?php echo htmlspecialchars($request['arrival_airport']); ?>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rejection_reason" class="form-label">Reason for Rejection <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="rejection_reason" name="reason" rows="4" placeholder="Please provide a clear reason for rejecting this request..." required></textarea>
+                            <div class="form-text">This reason will be shown to the requester.</div>
+                        </div>
+                        <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
+                        <input type="hidden" name="action" value="reject">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fe fe-x me-2"></i>Reject Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </body>
 
