@@ -66,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MOWAA Travel Request System</title>
     
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/brand-logos/icon.png" type="image/png">
+    
     <!-- Bootstrap CSS -->
     <link href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Icons CSS -->

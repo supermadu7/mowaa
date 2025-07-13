@@ -43,7 +43,7 @@ try {
    <title> MOWAA - View Travel Requests </title>
 
    <!-- Favicon -->
-   <link rel="icon" href="../assets/images/brand-logos/favicon.ico" type="image/x-icon">
+   <link rel="icon" href="../assets/images/brand-logos/icon.png" type="image/png">
 
    <!-- Choices JS -->
    <script src="../assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -78,6 +78,8 @@ try {
    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
 
+
+
 </head>
 
 <body>
@@ -93,32 +95,7 @@ try {
       <?php include 'includes/header.php'; ?>
       <!-- /app-header -->
       <!-- Start::app-sidebar -->
-      <aside class="app-sidebar sticky" id="sidebar">
-
-         <!-- Start::main-sidebar-header -->
-         <div class="main-sidebar-header">
-            <a href="index.php" class="header-logo">
-               <img src="../assets/images/brand-logos/desktop-white.png" class="desktop-white" alt="logo">
-               <img src="../assets/images/brand-logos/toggle-white.png" class="toggle-white" alt="logo">
-               <img src="../assets/images/brand-logos/desktop-logo.png" class="desktop-logo" alt="logo">
-               <img src="../assets/images/brand-logos/toggle-dark.png" class="toggle-dark" alt="logo">
-               <img src="../assets/images/brand-logos/toggle-logo.png" class="toggle-logo" alt="logo">
-               <img src="../assets/images/brand-logos/desktop-dark.png" class="desktop-dark" alt="logo">
-            </a>
-         </div>
-         <!-- End::main-sidebar-header -->
-
-         <!-- Start::main-sidebar -->
-         <div class="main-sidebar" id="sidebar-scroll">
-
-            <!-- Start::nav -->
-            <?php include 'includes/sidebar.php'; ?>
-            <!-- End::nav -->
-
-         </div>
-         <!-- End::main-sidebar -->
-
-      </aside>
+      <?php include 'includes/sidebar.php'; ?>
       <!-- End::app-sidebar -->
 
       <!-- Start::app-content -->

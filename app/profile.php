@@ -144,7 +144,7 @@ try {
     <title>MOWAA - Profile</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="../assets/images/brand-logos/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../assets/images/brand-logos/icon.png" type="image/png">
 
     <!-- Bootstrap Css -->
     <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -192,6 +192,8 @@ try {
         .nav-pills .nav-link.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+        
+
     </style>
 </head>
 
@@ -206,26 +208,7 @@ try {
         <?php include 'includes/header.php'; ?>
         
         <!-- Start::app-sidebar -->
-        <aside class="app-sidebar sticky" id="sidebar">
-            <!-- Start::main-sidebar-header -->
-            <div class="main-sidebar-header">
-                <a href="index.php" class="header-logo">
-                    <img src="../assets/images/brand-logos/desktop-white.png" class="desktop-white" alt="logo">
-                    <img src="../assets/images/brand-logos/toggle-white.png" class="toggle-white" alt="logo">
-                    <img src="../assets/images/brand-logos/desktop-logo.png" class="desktop-logo" alt="logo">
-                    <img src="../assets/images/brand-logos/toggle-dark.png" class="toggle-dark" alt="logo">
-                    <img src="../assets/images/brand-logos/toggle-logo.png" class="toggle-logo" alt="logo">
-                    <img src="../assets/images/brand-logos/desktop-dark.png" class="desktop-dark" alt="logo">
-                </a>
-            </div>
-            
-            <!-- Start::main-sidebar -->
-            <div class="main-sidebar" id="sidebar-scroll">
-                <!-- Start::nav -->
-                <?php include 'includes/sidebar.php'; ?>
-                <!-- End::nav -->
-            </div>
-        </aside>
+        <?php include 'includes/sidebar.php'; ?>
         <!-- End::app-sidebar -->
 
         <!-- Start::app-content -->
