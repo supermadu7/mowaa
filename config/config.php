@@ -40,8 +40,7 @@ define('UPLOAD_SCAN_ENABLED', true); // Enable virus scanning if available
 
 // Application URLs
 define('BASE_URL', 'http://localhost/mowaa/');
-define('DASHBOARD_URL', BASE_URL . 'app/index.html');
-define('TRAVEL_REQUEST_URL', BASE_URL . 'app/travel-request.php');
+define('DASHBOARD_URL', BASE_URL . 'app/index.php');
 
 // Status Constants
 define('STATUS_PENDING', 'pending');

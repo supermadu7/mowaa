@@ -105,13 +105,17 @@ Restart your web server after changes.
 ```
 mowaa/
 ├── app/
-│   ├── travel-request.php          # Form page
-│   ├── process-travel-request.php  # Form processor
+│   ├── index.php                   # Dashboard (PHP)
+│   ├── travel-requests.php         # Travel requests listing
+│   ├── request-details.php         # Travel request details
+│   ├── user-management.php         # User management CRUD
+│   ├── includes/                   # Header, sidebar, footer
 │   └── assets/                     # CSS, JS, images
 ├── config/
-│   └── config.php                  # Configuration settings
+│   ├── config.php                  # Configuration settings
+│   └── database.php                # Database connection
 ├── database/
-│   └── travel_request_tables.sql   # Database schema
+│   └── *.sql                       # Database schema files
 ├── uploads/
 │   └── travel-requests/            # Uploaded files
 ├── logs/
