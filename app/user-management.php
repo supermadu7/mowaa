@@ -1,12 +1,14 @@
 <?php
 session_start();
+require_once 'includes/auth.php';
 require_once '../config/database.php';
 
-// Check if user is logged in and has admin privileges
-// if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: login.php');
-//     exit;
-// }
+// Require user to be logged in and have permission to manage users
+requireLogin();
+if (!canManageUsers()) {
+    header('Location: index.php');
+    exit();
+}
 
 // Handle edit user form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit_user') {

@@ -1,12 +1,15 @@
 <?php
 session_start();
+require_once 'includes/auth.php';
 require_once '../config/database.php';
 
-// Check if user is logged in (you may need to adjust this based on your authentication system)
-// if (!isset($_SESSION['user_id'])) {
-//     header('Location: login.php');
-//     exit;
-// }
+// Require user to be logged in and have permission to approve requests
+requireLogin();
+if (!canApproveRequests()) {
+    $_SESSION['error'] = 'You do not have permission to perform this action.';
+    header('Location: travel-requests.php');
+    exit();
+}
 
 // Initialize response variables
 $success = false;

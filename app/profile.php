@@ -1,9 +1,11 @@
 <?php
 session_start();
+require_once 'includes/auth.php';
 require_once '../config/database.php';
 
-// For now, we'll simulate a logged-in user (you can integrate with your auth system later)
-$currentUserId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1; // Default to user ID 1 for testing
+// Require user to be logged in
+requireLogin();
+$currentUserId = $_SESSION['user_id'];
 
 // Handle form submissions
 $message = '';

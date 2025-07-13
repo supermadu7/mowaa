@@ -1,7 +1,10 @@
 <?php
 session_start();
-// Include database connection
+require_once 'includes/auth.php';
 require_once '../config/database.php';
+
+// Require user to be logged in
+requireLogin();
 
 // Get request ID from URL parameter
 $request_id = isset($_GET['d']) ? (int)$_GET['d'] : 0;

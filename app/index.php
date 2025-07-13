@@ -1,12 +1,10 @@
 <?php
 session_start();
+require_once 'includes/auth.php';
 require_once '../config/database.php';
 
-// Check if user is logged in (optional for now)
-// if (!isset($_SESSION['user_id'])) {
-//     header('Location: login.php');
-//     exit;
-// }
+// Require user to be logged in
+requireLogin();
 
 // Fetch dashboard statistics
 try {

@@ -1,7 +1,10 @@
 <?php
 session_start();
-// Include database connection
+require_once 'includes/auth.php';
 require_once '../config/database.php';
+
+// Require user to be logged in
+requireLogin();
 
 // Fetch travel requests data
 try {

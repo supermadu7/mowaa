@@ -1,4 +1,30 @@
- <header class="app-header">
+<?php
+// Get current user information
+require_once 'auth.php';
+$currentUser = getCurrentUser();
+$userName = $currentUser ? $currentUser['full_name'] : 'Guest User';
+$userRole = $currentUser ? ucfirst($currentUser['user_role']) : 'Guest';
+
+// Role badge colors
+$roleBadgeClass = '';
+switch($currentUser['user_role'] ?? '') {
+    case 'admin':
+        $roleBadgeClass = 'danger';
+        break;
+    case 'manager':
+        $roleBadgeClass = 'warning';
+        break;
+    case 'approver':
+        $roleBadgeClass = 'info';
+        break;
+    case 'user':
+        $roleBadgeClass = 'primary';
+        break;
+    default:
+        $roleBadgeClass = 'secondary';
+}
+?>
+<header class="app-header">
 
             <!-- Start::main-header-container -->
             <div class="main-header-container container-fluid">
@@ -9,7 +35,7 @@
                     <!-- Start::header-element -->
                     <div class="header-element">
                         <div class="horizontal-logo">
-                            <a href="index.html" class="header-logo">
+                            <a href="index.php" class="header-logo">
                                 <img src="../assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
                                 <img src="../assets/images/brand-logos/toggle-logo.png" alt="logo" class="toggle-logo">
                                 <img src="../assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
@@ -48,16 +74,25 @@
                                     <img src="../assets/images/faces/9.jpg" alt="img" width="32" height="32" class="rounded-circle">
                                 </div>
                                 <div class="d-sm-block d-none">
-                                    <p class="fw-semibold mb-0 lh-1">John Doe</p>
-                                    <span class="op-7 fw-normal d-block fs-11">Administrator</span>
+                                    <p class="fw-semibold mb-0 lh-1"><?php echo htmlspecialchars($userName); ?></p>
+                                    <span class="op-7 fw-normal d-block fs-11"><?php echo htmlspecialchars($userRole); ?></span>
                                 </div>
                             </div>
                         </a>
                         <!-- End::header-link|dropdown-toggle -->
                         <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
-                            <li><a class="dropdown-item d-flex" href="profile.php"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</a></li>
-                            
-                            <li><a class="dropdown-item d-flex" href="signin.html"><i class="ti ti-logout fs-18 me-2 op-7"></i>Log Out</a></li>
+                           
+                            <li>
+                                <div class="dropdown-item-text">
+                                    <small class="text-muted">Logged in as:</small><br>
+                                    <span class="fw-semibold"><?php echo htmlspecialchars($currentUser['username'] ?? ''); ?></span>
+                                    <span class="badge bg-<?php echo $roleBadgeClass; ?> ms-2"><?php echo htmlspecialchars($userRole); ?></span>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                             <li><a class="dropdown-item d-flex" href="profile.php"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item d-flex" href="logout.php"><i class="ti ti-logout fs-18 me-2 op-7"></i>Log Out</a></li>
                         </ul>
                     </div>  
                     <!-- End::header-element -->    
