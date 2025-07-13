@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS travel_requests (
 -- Users table (for approvers and other system users with login functionality)
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_code VARCHAR(50) UNIQUE NOT NULL,
     username VARCHAR(100) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -62,7 +61,6 @@ CREATE TABLE IF NOT EXISTS users (
     
     INDEX idx_username (username),
     INDEX idx_email (email),
-    INDEX idx_user_code (user_code),
     INDEX idx_user_role (user_role),
     INDEX idx_can_approve (can_approve),
     INDEX idx_department (department),
@@ -72,12 +70,12 @@ CREATE TABLE IF NOT EXISTS users (
 -- Insert sample users (approvers and admins)
 -- Note: All users have default password 'password123' (hashed)
 -- Change these passwords after first login for security
-INSERT INTO users (user_code, username, email, password_hash, first_name, last_name, title, department, user_role, can_approve, approval_limit) VALUES
-('admin1', 'admin', 'admin@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System', 'Administrator', 'System Administrator', 'IT', 'admin', TRUE, 999999.99),
-('mgr001', 'johnsmith', 'john.smith@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John', 'Smith', 'Department Manager', 'Operations', 'manager', TRUE, 10000.00),
-('mgr002', 'sarahjohnson', 'sarah.johnson@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Sarah', 'Johnson', 'Finance Manager', 'Finance', 'manager', TRUE, 25000.00),
-('mgr003', 'michaelbrown', 'michael.brown@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Michael', 'Brown', 'Operations Manager', 'Operations', 'manager', TRUE, 15000.00),
-('dir001', 'lisadavis', 'lisa.davis@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Lisa', 'Davis', 'Regional Director', 'Management', 'approver', TRUE, 50000.00);
+INSERT INTO users (username, email, password_hash, first_name, last_name, title, department, user_role, can_approve, approval_limit) VALUES
+('admin', 'admin@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System', 'Administrator', 'System Administrator', 'IT', 'admin', TRUE, 999999.99),
+('johnsmith', 'john.smith@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John', 'Smith', 'Department Manager', 'Operations', 'manager', TRUE, 10000.00),
+('sarahjohnson', 'sarah.johnson@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Sarah', 'Johnson', 'Finance Manager', 'Finance', 'manager', TRUE, 25000.00),
+('michaelbrown', 'michael.brown@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Michael', 'Brown', 'Operations Manager', 'Operations', 'manager', TRUE, 15000.00),
+('lisadavis', 'lisa.davis@mowaa.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Lisa', 'Davis', 'Regional Director', 'Management', 'approver', TRUE, 50000.00);
 
 -- User sessions table for login management
 CREATE TABLE IF NOT EXISTS user_sessions (
