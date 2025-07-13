@@ -55,7 +55,7 @@
                         </a>
                         <!-- End::header-link|dropdown-toggle -->
                         <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
-                            <li><a class="dropdown-item d-flex" href="profile.html"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</a></li>
+                            <li><a class="dropdown-item d-flex" href="profile.php"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</a></li>
                             
                             <li><a class="dropdown-item d-flex" href="signin.html"><i class="ti ti-logout fs-18 me-2 op-7"></i>Log Out</a></li>
                         </ul>

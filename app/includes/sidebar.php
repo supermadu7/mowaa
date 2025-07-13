@@ -47,6 +47,21 @@
                             </a>
                         </li>
                         <!-- End::slide -->
+
+                        <!-- Start::slide__category -->
+                        <li class="slide__category"><span class="category-name">My Account</span></li>
+                        <!-- End::slide__category -->
+
+                        <!-- Start::slide -->
+                        <li class="slide">
+                            <a href="profile.php" class="side-menu__item">
+                                <span class="shape1"></span>
+                                <span class="shape2"></span>
+                                <i class="ti-settings side-menu__icon"></i>
+                                <span class="side-menu__label">My Profile</span>
+                            </a>
+                        </li>
+                        <!-- End::slide -->
  
                     </ul>
                    

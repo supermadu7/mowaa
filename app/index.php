@@ -484,9 +484,9 @@ try {
                                         </button>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <button type="button" class="btn btn-outline-info w-100" onclick="window.location.href='user-management.php'">
-                                            <i class="fe fe-users fs-18 d-block mb-2"></i>
-                                            Manage Users
+                                        <button type="button" class="btn btn-outline-info w-100" onclick="window.location.href='profile.php'">
+                                            <i class="fe fe-settings fs-18 d-block mb-2"></i>
+                                            My Profile
                                         </button>
                                     </div>
                                     <div class="col-md-3 mb-3">
