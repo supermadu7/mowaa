@@ -40,6 +40,18 @@ try {
         exit;
     }
 
+    // Check if current user can approve/reject this request
+    $isAdmin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+    $isDesignatedApprover = false;
+    
+    // Check if current user is the designated approver (approver is stored as username)
+    if (isset($_SESSION['username']) && !empty($request['approver'])) {
+        // Compare current user's username with the approver field
+        $isDesignatedApprover = ($_SESSION['username'] == $request['approver']);
+    }
+    
+    $canApproveReject = $isAdmin || $isDesignatedApprover;
+
 } catch (Exception $e) {
     echo "<div class='alert alert-danger'>Error fetching travel request: " . $e->getMessage() . "</div>";
     exit;
@@ -156,7 +168,7 @@ try {
                         <a href="travel-requests.php" class="btn btn-secondary my-2 me-2">
                             <i class="fe fe-arrow-left me-2"></i> Back to List
                         </a>
-                        <?php if ($request['status'] == 'pending'): ?>
+                        <?php if ($request['status'] == 'pending' && $canApproveReject): ?>
                             <button type="button" class="btn btn-success my-2 me-2" data-bs-toggle="modal" data-bs-target="#approveModal">
                                 <i class="fe fe-check me-2"></i> Approve
                             </button>
@@ -176,6 +188,23 @@ try {
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     <?php unset($_SESSION['alert']); ?>
+                <?php endif; ?>
+
+                <!-- Access Control Notice -->
+                <?php if ($request['status'] == 'pending' && !$canApproveReject): ?>
+                    <div class="alert alert-info border-start border-info border-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fe fe-info fs-18 me-3"></i>
+                            <div>
+                                <h6 class="mb-1">Access Notice</h6>
+                                <p class="mb-0">
+                                    You cannot approve or reject this travel request because it was not assigned to you as the approver. 
+                                    Only the designated approver (<strong><?php echo htmlspecialchars($request['approver'] ?: 'Not assigned'); ?></strong>) 
+                                    or system administrators can take action on this request.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 <?php endif; ?>
 
                 <!-- Request Overview Card -->
@@ -503,6 +532,7 @@ try {
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>
 
+    <?php if ($request['status'] == 'pending' && $canApproveReject): ?>
     <!-- Approve Modal -->
     <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -585,6 +615,7 @@ try {
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
 </body>
 
