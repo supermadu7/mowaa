@@ -434,7 +434,7 @@ function getFieldError($fieldName, $errors) {
                      <div class="card-body">
                         <!-- Passport Upload -->
                         <div class="mb-3">
-                           <label for="passportUpload" class="form-label">Passport (PDF or Image) <span class="text-danger">*</span></label>
+                           <label for="passportUpload" class="form-label">Passport (PDF or Image) </label>
                            <input type="file" class="form-control<?php echo hasFieldError('passportUpload', $errors) ? ' is-invalid' : ''; ?>" 
                               id="passportUpload" name="passportUpload" accept=".pdf,.jpg,.jpeg,.png,.gif" >
                            <?php if (hasFieldError('passportUpload', $errors)): ?>
@@ -446,10 +446,10 @@ function getFieldError($fieldName, $errors) {
 
                         <!-- Additional Documents Upload -->
                         <div class="mb-3">
-                           <label for="additionalDocuments" class="form-label">Additional Documents (PDF or Image)</label>
+                           <label for="additionalDocuments" class="form-label">Additional Document (PDF or Image)</label>
                            <input type="file" class="form-control<?php echo hasFieldError('additionalDocuments', $errors) ? ' is-invalid' : ''; ?>" 
-                              id="additionalDocuments" name="additionalDocuments[]" accept=".pdf,.jpg,.jpeg,.png,.gif" multiple>
-                           <div class="form-text">Optional: You can select multiple files</div>
+                              id="additionalDocuments" name="additionalDocuments" accept=".pdf,.jpg,.jpeg,.png,.gif">
+                           <div class="form-text">Optional: Select one additional document if needed</div>
                            <?php if (hasFieldError('additionalDocuments', $errors)): ?>
                               <div class="invalid-feedback">
                                  <?php echo getFieldError('additionalDocuments', $errors); ?>
