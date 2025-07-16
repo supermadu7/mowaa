@@ -4,17 +4,22 @@ session_start();
 // Set maximum execution time for file processing
 ini_set('max_execution_time', 300);
 
-// Configuration
-$uploadDir = '../uploads/travel-requests/';
-$maxFileSize = 1024 * 1024; // 1MB final compressed size
-$maxUploadSize = 5 * 1024 * 1024; // 5MB initial upload limit (reasonable for high-quality images)
-$allowedTypes = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
+// Include database and configuration
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/config.php';
 
-// Database configuration (adjust as needed)
-$dbHost = 'localhost';
-$dbUser = 'root';
-$dbPass = '';
-$dbName = 'mowaa_db';
+// EMAIL CONFIGURATION NOTE:
+// For email notifications to work properly, ensure that:
+// 1. PHP's mail() function is configured on your server
+// 2. SMTP settings are properly configured in php.ini
+// 3. Alternative: Consider using PHPMailer or similar library for production
+// 4. Test email functionality on your server environment
+
+// Configuration from config file
+$uploadDir = UPLOAD_DIR;
+$maxFileSize = MAX_FILE_SIZE;
+$maxUploadSize = 5 * 1024 * 1024; // 5MB initial upload limit (reasonable for high-quality images)
+$allowedTypes = ALLOWED_FILE_TYPES;
 
 // Create upload directory if it doesn't exist
 if (!is_dir($uploadDir)) {
@@ -134,9 +139,18 @@ function processUploadedFile($file, $uploadDir, $prefix = '') {
         throw new Exception("Invalid file type. Allowed types: " . implode(', ', $allowedTypes));
     }
     
-    // Generate unique filename
-    $uniqueName = $prefix . '_' . uniqid() . '_' . time() . '.' . $fileExtension;
+    // Generate unique filename - simplified format with conflict handling
+    $uniqueName = $prefix . '.' . $fileExtension;
     $destination = $uploadDir . $uniqueName;
+    
+    // Handle file naming conflicts by adding a counter
+    $counter = 1;
+    while (file_exists($destination)) {
+        $uniqueName = $prefix . '_' . $counter . '.' . $fileExtension;
+        $destination = $uploadDir . $uniqueName;
+        $counter++;
+    }
+    
     $tempDestination = $uploadDir . 'temp_' . $uniqueName;
     
     // Move uploaded file to temp location
@@ -185,6 +199,133 @@ function processUploadedFile($file, $uploadDir, $prefix = '') {
         'file_size' => filesize($destination),
         'file_type' => $fileExtension
     ];
+}
+
+/**
+ * Send email notification
+ */
+function sendEmailNotification($to, $subject, $message, $fromEmail = FROM_EMAIL, $fromName = FROM_NAME) {
+    $headers = [
+        'MIME-Version: 1.0',
+        'Content-type: text/html; charset=UTF-8',
+        'From: ' . $fromName . ' <' . $fromEmail . '>',
+        'Reply-To: ' . $fromEmail,
+        'X-Mailer: PHP/' . phpversion()
+    ];
+    
+    return mail($to, $subject, $message, implode("\r\n", $headers));
+}
+
+/**
+ * Generate email template for travel request notifications
+ */
+function generateTravelRequestEmailTemplate($requestData, $isApprover = false) {
+    $template = '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #007bff; color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background-color: #f8f9fa; }
+            .details { background-color: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
+            .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+            .button { display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Travel Request ' . ($isApprover ? 'Approval Required' : 'Submitted') . '</h1>
+            </div>
+            <div class="content">
+                ' . ($isApprover ? 
+                    '<p>Dear Approver,</p>
+                    <p>A new travel request has been submitted and requires your approval.</p>' : 
+                    '<p>Dear ' . htmlspecialchars($requestData['firstName'] . ' ' . $requestData['lastName']) . ',</p>
+                    <p>Your travel request has been successfully submitted and is now pending approval.</p>'
+                ) . '
+                
+                <div class="details">
+                    <h3>Travel Request Details</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Request ID:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['requestId']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Traveller:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['firstName'] . ' ' . $requestData['lastName']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Department:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['department']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Travel Date:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['travelDate']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>From:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['departureAirport']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>To:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['arrivalAirport']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Reason:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['reasonTravel']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Estimated Cost:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">$' . number_format($requestData['estimatedCost'], 2) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Project:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['projectName']) . '</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Budget Code:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['budgetCode']) . '</td></tr>
+                        ' . ($isApprover ? '<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Approver:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">' . htmlspecialchars($requestData['approver']) . '</td></tr>' : '') . '
+                    </table>
+                </div>
+                
+                ' . ($isApprover ? 
+                    '<p>Please review this request and take appropriate action.</p>
+                    <p><strong>Next Steps:</strong></p>
+                    <ul>
+                        <li>Log into the system to review the full request details</li>
+                        <li>Approve or reject the request with comments</li>
+                        <li>The traveller will be notified of your decision</li>
+                    </ul>' : 
+                    '<p><strong>Next Steps:</strong></p>
+                    <ul>
+                        <li>Your request will be reviewed by: ' . htmlspecialchars($requestData['approver']) . '</li>
+                        <li>You will receive an email notification once approved/rejected</li>
+                        <li>Keep your Request ID for future reference</li>
+                    </ul>'
+                ) . '
+            </div>
+            <div class="footer">
+                <p>This is an automated message from the Mowaa Travel Management System.</p>
+                <p>Please do not reply to this email.</p>
+            </div>
+        </div>
+    </body>
+    </html>';
+    
+    return $template;
+}
+
+/**
+ * Generate a unique request ID with database uniqueness check
+ */
+function generateUniqueRequestId() {
+    $db = new Database();
+    $pdo = $db->getConnection();
+    
+    $maxAttempts = 10;
+    $attempt = 0;
+    
+    do {
+        $attempt++;
+        
+        // Generate a shorter, more readable ID
+        $timestamp = time();
+        $random = strtoupper(substr(uniqid(), -4)); // 4 character suffix
+        $requestId = 'TR_' . substr($timestamp, -4) . $random; // TR_XXXXYYY format
+        
+        // Check if this ID already exists in the database
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM travel_requests WHERE request_id = ?");
+        $stmt->execute([$requestId]);
+        $exists = $stmt->fetchColumn() > 0;
+        
+        if (!$exists) {
+            return $requestId;
+        }
+        
+        // If ID exists, wait a moment and try again
+        usleep(100000); // 0.1 second
+        
+    } while ($attempt < $maxAttempts);
+    
+    // Fallback to longer ID if we can't generate a unique shorter one
+    return 'TR_' . uniqid();
 }
 
 // Main processing
@@ -296,8 +437,8 @@ try {
         'requester' => !empty($_POST['requester']) ? trim($_POST['requester']) : trim($_POST['firstName']) . ' ' . trim($_POST['lastName'])
     ];
 
-    // Generate unique request ID
-    $requestId = uniqid('TR_', true);
+    // Generate shorter unique request ID (8 characters) with uniqueness check
+    $requestId = generateUniqueRequestId();
     
     // Process passport upload (optional)
     $passportFile = null;
@@ -326,8 +467,8 @@ try {
     
     // Save to database
     try {
-        $pdo = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db = new Database();
+        $pdo = $db->getConnection();
         
         // Handle additional file path (single file only)
         $additionalFilePath = $additionalFile ? $additionalFile['file_path'] : null;
@@ -362,10 +503,88 @@ try {
             $additionalFilePath
         ]);
         
+        // Get approver email from database using the approver ID
+        $approverEmail = null;
+        $approverName = null;
+        
+        try {
+            $approverStmt = $pdo->prepare("SELECT email, first_name FROM users WHERE id = ?");
+            $approverStmt->execute([$data['approver']]);
+            $approverData = $approverStmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($approverData) {
+                $approverEmail = $approverData['email'];
+                $approverName = $approverData['first_name'];
+            } else {
+                error_log("Approver not found for ID: " . $data['approver']);
+                $approverEmail = null; // Will skip approver email
+            }
+        } catch (PDOException $e) {
+            error_log("Database error fetching approver: " . $e->getMessage());
+            $approverEmail = null; // Will skip approver email
+        }
+        
+        // Send email notifications after successful database save
+        $emailData = [
+            'requestId' => $requestId,
+            'firstName' => $data['firstName'],
+            'lastName' => $data['lastName'],
+            'department' => $data['department'],
+            'travelDate' => $data['travelDate'],
+            'departureAirport' => $data['departureAirport'],
+            'arrivalAirport' => $data['arrivalAirport'],
+            'reasonTravel' => $data['reasonTravel'],
+            'estimatedCost' => $data['estimatedCost'],
+            'projectName' => $data['projectName'],
+            'budgetCode' => $data['budgetCode'],
+            'approver' => $approverName ? $approverName : 'Unknown Approver'
+        ];
+        
+        // Send email to traveller
+        $travellerSubject = "Travel Request Submitted Successfully - " . $requestId;
+        $travellerMessage = generateTravelRequestEmailTemplate($emailData, false);
+        $travellerEmailSent = false;
+        
+        try {
+            $travellerEmailSent = sendEmailNotification($data['email'], $travellerSubject, $travellerMessage);
+        } catch (Exception $e) {
+            error_log("Failed to send email to traveller: " . $e->getMessage());
+        }
+        
+        
+        // Send email to approver (only if we have valid email)
+        $approverEmailSent = false;
+        
+        if ($approverEmail) {
+            $approverSubject = "Travel Request Approval Required - " . $requestId;
+            $approverMessage = generateTravelRequestEmailTemplate($emailData, true);
+            
+            try {
+                $approverEmailSent = sendEmailNotification($approverEmail, $approverSubject, $approverMessage);
+            } catch (Exception $e) {
+                error_log("Failed to send email to approver: " . $e->getMessage());
+            }
+        } else {
+            error_log("No valid approver email found for approver ID: " . $data['approver']);
+        }
+        
+        // Log email sending results
+        if ($travellerEmailSent) {
+            error_log("Travel request notification sent to traveller: " . $data['email']);
+        } else {
+            error_log("Failed to send travel request notification to traveller: " . $data['email']);
+        }
+        
+        if ($approverEmailSent) {
+            error_log("Travel request notification sent to approver: " . $approverEmail . " (" . $approverName . ")");
+        } else {
+            error_log("Failed to send travel request notification to approver: " . ($approverEmail ? $approverEmail : 'No email found') . " (ID: " . $data['approver'] . ")");
+        }
+        
     } catch (PDOException $e) {
         // If database fails, redirect with error
         error_log("Database error in travel request: " . $e->getMessage());
-        redirectWithErrors([], $formData, "Database error occurred. Please try again later.");
+        redirectWithErrors([], $formData, "Database error occurred. Please try again later.".$e->getMessage());
     }
     
     // Success response
@@ -412,6 +631,31 @@ try {
                             $<?php echo number_format($data['estimatedCost'], 2); ?>
                         </div>
                     </div>
+                    
+                    <?php if ($travellerEmailSent || $approverEmailSent): ?>
+                    <div class="alert alert-success">
+                        <strong>✓ Email Notifications:</strong><br>
+                        <?php if ($travellerEmailSent): ?>
+                        • Confirmation email sent to you (<?php echo htmlspecialchars($data['email']); ?>)<br>
+                        <?php endif; ?>
+                        <?php if ($approverEmailSent): ?>
+                        • Approval request sent to <?php echo htmlspecialchars($approverName . ' (' . $approverEmail . ')'); ?>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <?php if (!$travellerEmailSent || !$approverEmailSent): ?>
+                    <div class="alert alert-warning">
+                        <strong>⚠ Email Notification Status:</strong><br>
+                        <?php if (!$travellerEmailSent): ?>
+                        • Unable to send confirmation email to you (<?php echo htmlspecialchars($data['email']); ?>)<br>
+                        <?php endif; ?>
+                        <?php if (!$approverEmailSent): ?>
+                        • Unable to send approval request to <?php echo htmlspecialchars($approverName ? $approverName . ' (' . $approverEmail . ')' : 'Selected approver (ID: ' . $data['approver'] . ')'); ?><br>
+                        <?php endif; ?>
+                        The request was still saved successfully.
+                    </div>
+                    <?php endif; ?>
                     
                     <div class="alert alert-info">
                         <strong>Next Steps:</strong><br>

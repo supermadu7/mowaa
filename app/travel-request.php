@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// Include database configuration
+require_once __DIR__ . '/../config/database.php';
+
 // Get errors and form data from session if they exist
 $errors = isset($_SESSION['form_errors']) ? $_SESSION['form_errors'] : [];
 $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : [];
@@ -8,6 +11,23 @@ $generalError = isset($_SESSION['general_error']) ? $_SESSION['general_error'] :
 
 // Clear session data after retrieving
 unset($_SESSION['form_errors'], $_SESSION['form_data'], $_SESSION['general_error']);
+
+// Fetch approvers from database
+$approvers = [];
+try {
+    $db = new Database();
+    $pdo = $db->getConnection();
+    
+    // Fetch users who can approve travel requests (assuming role 'admin' or 'manager')
+    $stmt = $pdo->prepare("SELECT id, first_name, last_name, email, user_role FROM users");
+    $stmt->execute();
+    $approvers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    // Log error and use fallback approvers
+    error_log("Database error fetching approvers: " . $e->getMessage());
+    $approvers = []; // Will show fallback message in form
+}
 
 // Helper function to get form field value
 function getFieldValue($fieldName, $formData, $default = '') {
@@ -480,10 +500,15 @@ function getFieldError($fieldName, $errors) {
                            <select class="form-select<?php echo hasFieldError('approver', $errors) ? ' is-invalid' : ''; ?>" 
                               id="approver" name="approver" aria-label="Select approver" required>
                               <option value="">Select Approver</option>
-                              <option value="manager1"<?php echo getFieldValue('approver', $formData) === 'manager1' ? ' selected' : ''; ?>>John Smith - Department Manager</option>
-                              <option value="manager2"<?php echo getFieldValue('approver', $formData) === 'manager2' ? ' selected' : ''; ?>>Sarah Johnson - Finance Manager</option>
-                              <option value="manager3"<?php echo getFieldValue('approver', $formData) === 'manager3' ? ' selected' : ''; ?>>Michael Brown - Operations Manager</option>
-                              <option value="director1"<?php echo getFieldValue('approver', $formData) === 'director1' ? ' selected' : ''; ?>>Lisa Davis - Regional Director</option>
+                              <?php if (!empty($approvers)): ?>
+                                 <?php foreach ($approvers as $approver): ?>
+                                    <option value="<?php echo htmlspecialchars($approver['id']); ?>"<?php echo getFieldValue('approver', $formData) == $approver['id'] ? ' selected' : ''; ?>>
+                                       <?php echo htmlspecialchars($approver['first_name']) . ' ' . htmlspecialchars($approver['first_name']) .  ' - ' . ucfirst($approver['user_role']); ?>
+                                    </option>
+                                 <?php endforeach; ?>
+                              <?php else: ?>
+                                 <option value="" disabled>No approvers available - Database connection issue</option>
+                              <?php endif; ?>
                            </select>
                            <label for="approver">Approver</label>
                            <?php if (hasFieldError('approver', $errors)): ?>

@@ -24,7 +24,7 @@ try {
                 id, request_id, first_name, last_name, email, department, 
                 travel_date, departure_airport, arrival_airport, reason_travel,
                 estimated_cost, project_name, budget_code, approver, requester,
-                passport_file, additional_files_paths, status, approved_by,
+                passport_file, additional_file, status, approved_by,
                 approved_at, approval_comments, rejected_by, rejected_at,
                 rejection_reason, created_at, updated_at
             FROM travel_requests 
@@ -338,15 +338,15 @@ try {
                                     <!-- Passport File -->
                                     <div class="col-md-6">
                                         <h6 class="fw-semibold text-muted mb-3">Passport Document</h6>
-                                        <?php if (!empty($request['passport_file_path'])): ?>
+                                        <?php if (!empty($request['passport_file'])): ?>
                                             <div class="file-item">
                                                 <div class="d-flex align-items-center">
                                                     <div class="me-3">
                                                         <?php
-                                                        $ext = strtolower(pathinfo($request['passport_file_path'], PATHINFO_EXTENSION));
+                                                        $ext = strtolower(pathinfo($request['passport_file'], PATHINFO_EXTENSION));
                                                         if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])):
                                                         ?>
-                                                            <img src="<?php echo htmlspecialchars($request['passport_file_path']); ?>" 
+                                                            <img src="<?php echo htmlspecialchars($request['passport_file']); ?>" 
                                                                  alt="Passport" class="file-preview rounded">
                                                         <?php else: ?>
                                                             <div class="bg-primary text-white p-3 rounded text-center">
@@ -357,12 +357,17 @@ try {
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1">Passport Document</h6>
-                                                        <p class="text-muted mb-2"><?php echo basename($request['passport_file_path']); ?></p>
-                                                        <a href="<?php echo htmlspecialchars($request['passport_file_path']); ?>" 
+                                                        <p class="text-muted mb-2" title="<?php echo htmlspecialchars(basename($request['passport_file'])); ?>">
+                                                            <?php 
+                                                            $filename = basename($request['passport_file']);
+                                                            echo htmlspecialchars(strlen($filename) > 30 ? substr($filename, 0, 30) . '...' : $filename); 
+                                                            ?>
+                                                        </p>
+                                                        <a href="<?php echo htmlspecialchars($request['passport_file']); ?>" 
                                                            target="_blank" class="btn btn-sm btn-primary">
                                                             <i class="fe fe-download me-1"></i> Download
                                                         </a>
-                                                        <a href="<?php echo htmlspecialchars($request['passport_file_path']); ?>" 
+                                                        <a href="<?php echo htmlspecialchars($request['passport_file']); ?>" 
                                                            target="_blank" class="btn btn-sm btn-outline-primary">
                                                             <i class="fe fe-eye me-1"></i> View
                                                         </a>
@@ -380,10 +385,23 @@ try {
                                     <div class="col-md-6">
                                         <h6 class="fw-semibold text-muted mb-3">Additional Documents</h6>
                                         <?php 
-                                        if (!empty($request['additional_files_paths'])):
-                                            $additionalFiles = json_decode($request['additional_files_paths'], true);
-                                            if ($additionalFiles && is_array($additionalFiles)):
+                                        if (!empty($request['additional_file'])):
+                                            // Handle both string (new format) and JSON (legacy format) 
+                                            $additionalFiles = [];
+                                            
+                                            // Try to decode as JSON first (legacy format)
+                                            $decoded = json_decode($request['additional_file'], true);
+                                            if ($decoded && is_array($decoded)) {
+                                                $additionalFiles = $decoded;
+                                            } else {
+                                                // Treat as single file path string (new format)
+                                                $additionalFiles = [$request['additional_file']];
+                                            }
+                                            
+                                            if (!empty($additionalFiles)):
                                                 foreach ($additionalFiles as $file):
+                                                    // Skip empty files
+                                                    if (empty($file)) continue;
                                         ?>
                                             <div class="file-item">
                                                 <div class="d-flex align-items-center">
@@ -403,7 +421,12 @@ try {
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1">Additional Document</h6>
-                                                        <p class="text-muted mb-2"><?php echo basename($file); ?></p>
+                                                        <p class="text-muted mb-2" title="<?php echo htmlspecialchars(basename($file)); ?>">
+                                                            <?php 
+                                                            $filename = basename($file);
+                                                            echo htmlspecialchars(strlen($filename) > 30 ? substr($filename, 0, 30) . '...' : $filename); 
+                                                            ?>
+                                                        </p>
                                                         <a href="<?php echo htmlspecialchars($file); ?>" 
                                                            target="_blank" class="btn btn-sm btn-primary">
                                                             <i class="fe fe-download me-1"></i> Download
