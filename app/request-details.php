@@ -45,9 +45,9 @@ try {
     $isDesignatedApprover = false;
     
     // Check if current user is the designated approver (approver is stored as username)
-    if (isset($_SESSION['username']) && !empty($request['approver'])) {
+    if (isset($_SESSION['user_id']) && !empty($request['approver'])) {
         // Compare current user's username with the approver field
-        $isDesignatedApprover = ($_SESSION['username'] == $request['approver']);
+        $isDesignatedApprover = ($_SESSION['user_id'] == $request['approver']);
     }
     
     $canApproveReject = $isAdmin || $isDesignatedApprover;
