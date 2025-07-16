@@ -12,8 +12,7 @@ require_once __DIR__ . '/../config/config.php';
 // For email notifications to work properly, ensure that:
 // 1. PHP's mail() function is configured on your server
 // 2. SMTP settings are properly configured in php.ini
-// 3. Alternative: Consider using PHPMailer or similar library for production
-// 4. Test email functionality on your server environment
+
 
 // Configuration from config file
 $uploadDir = UPLOAD_DIR;
